@@ -1,0 +1,54 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+}
+.modal {
+  width: 420px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+margin: 0 auto;
+}
+.btn button{
+    width: 160px;
+    height: 41px;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+    background-color: #dfdfdf;
+    border: none;
+    margin: 0 10px;
+    
+}
+.deleteBtn button{
+    color: #fff;
+    background-color: #f43f5e;
+}
+.modalText{
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    color: #282828;
+    margin-bottom: 2rem;
+}
+.img{
+    margin: 2rem auto 3rem;
+    display: flex;
+    border: none;
+  
+
+}
