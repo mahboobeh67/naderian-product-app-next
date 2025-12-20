@@ -25,15 +25,15 @@ const addProductMutation = useAddProductItem();
           <input
             type="text"
             placeholder="نام کالا"
-            {...register("name", { required: "نام کالا الزامی است" })}
+            {...register("title", { required: "نام کالا الزامی است" })}
           />
-          {errors.name && <span>{errors.name.message}</span>}
+          {errors.title && <span>{errors.title.message}</span>}
         </div>
 
         <div>
           <label>تعداد موجودی</label>
           <input
-            type="number"
+            type="text"
             placeholder="تعداد"
             {...register("quantity", { required: true, min: 1 })}
           />
@@ -42,7 +42,7 @@ const addProductMutation = useAddProductItem();
         <div>
           <label>قیمت</label>
           <input
-            type="number"
+            type="text"
             placeholder="قیمت"
             {...register("price", { required: true })}
           />
@@ -52,7 +52,7 @@ const addProductMutation = useAddProductItem();
           <button type="submit" className="active" disabled={addProductMutation.isPending}>
             {addProductMutation.isPending ? "در حال ایجاد ..." : "ایجاد"}
           </button>
-          <button type="button" className="disable">
+          <button type="button" className="disable" onClick={onClose}>
             انصراف
           </button>
         </div>

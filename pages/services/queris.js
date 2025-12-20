@@ -1,21 +1,16 @@
-import { useEffect } from "react";
 
 
-const api = axios.create({
-  baseURL: "http://localhost:3000",
-});
- export const GetProductList = () => useEffect(() => {
-    fetch("http://localhost:3000/products?page=1&limit=10")
-      .then(res => res.json())
-      .then(res => {
-        const products =
-          res?.data?.products ??
-          res?.data ??
-          res?.products ??
-          res ??
-          [];
-  
-        setProductList(Array.isArray(products) ? products : []);
-      });
-  }, []);
-  
+import { api } from "./mutation";
+
+
+export const getProducts = async ({ queryKey }) => {
+  const [, params] = queryKey
+  const res = await api.get("/products", { params })
+
+  return res.data
+}
+export const addProduct = async (data) => {
+  const res = await api.post("/products", data)
+  return res.data
+}
+

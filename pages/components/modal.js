@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import Image from "next/image"
 import styles from "../../styles/Modal.module.css"
 import { useState } from "react"
-function Modal() {
+function Modal({product, onClose}) {
     const router = useRouter()
     const [isClosing , setIsClosing] = useState(false)
     if (isClosing) return null
@@ -12,7 +12,7 @@ function Modal() {
     }
     const handleDelete = async () => {
   // await deleteProduct(id)
-  router.back()
+ onClose()
 }
   return (
      <div className={styles.overlay}>
@@ -26,17 +26,17 @@ function Modal() {
             className={styles.img}
           />
           <div className={styles.modalText}>
-            <p >آیا از حذف این محصول مطمئنید؟</p>
+            <p >{product.title}آیا از حذف این محصول مطمئنید؟</p>
           </div>
           <div >
 
            <div className={styles.btn}>
 <div className={styles.deleteBtn}>
 
-              <button>حذف</button>
+              <button onClick={handleDelete}>حذف</button>
             </div>
             <button
-              onClick={router.back}
+              onClick={onClose}
              
             >
               لغو

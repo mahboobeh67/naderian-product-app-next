@@ -33,6 +33,8 @@ export default function LoginPage() {
       }
     );
   };
+{errors.username && <span>{errors.username.message}</span>}
+{errors.password && <span>{errors.password.message}</span>}
 
   return (
     <div className={styles.container}>

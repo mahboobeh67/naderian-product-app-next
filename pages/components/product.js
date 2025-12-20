@@ -1,22 +1,33 @@
-'use client'
+"use client";
+import { useQuery } from "@tanstack/react-query";
+import { FiSearch } from "react-icons/fi";
+import Image from "next/image";
+import styles from "../../styles/product.module.css";
+import { getProducts } from "../services/queris";
+import { useState } from "react";
+import EditProduct from "../products/editProduct";
+import Modal from "./modal";
+import AddProduct from "../products/addProduct";
+export default function Product() {
+  const [isAddOpen, setIsAddOpen] = useState(false)
+const [editProduct, setEditProduct] = useState(null)
+const [deleteProduct, setDeleteProduct] = useState(null)
+  
+  const { data:queryData, isLoading, isError } = useQuery({
+    queryKey: ["products", { page: 1, limit: 10 }],
+    queryFn: getProducts,
+  });
+ 
 
-import { FiSearch } from "react-icons/fi"
-import useSWR from "swr"
-import Image from "next/image"
-import styles from "../../styles/product.module.css"
+  if (isLoading) return <div>⏳ در حال ذخیره محصول...</div>;
+  if (isError) return <div>❌ خطا در ثبت محصول</div>;
 
-   
-
-export default function Product(){
-  const { data, error, isLoading } = useSWR(
-    'http://localhost:3000/products',
-    
-  )
-
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error</div>
-
-  const products = Array.isArray(data) ? data : data?.data ?? []
+const products = Array.isArray(queryData?.data)
+  ? queryData.data
+  : [];
+const total = queryData?.totalProducts
+const meta = queryData?.meta
+ 
 
   return (
     <div className={styles.container}>
@@ -41,8 +52,9 @@ export default function Product(){
           <p>مدیریت کالا</p>
         </div>
         <div className={styles.pageHeaderBtn}>
-          <button>افزودن محصول</button>
+          <button onClick={() => setIsAddOpen(true)}>افزودن محصول</button>
         </div>
+        {isAddOpen && (<AddProduct onClose={() => setIsAddOpen(false)}/>)}
       </div>
 
       <div className={styles.productTable}>
@@ -56,22 +68,36 @@ export default function Product(){
             </tr>
           </thead>
           <tbody>
-            {products.map((item, any) => (
-              <tr key={item.id}>
-                <td>{item.title || item.name}</td>
-                <td>{item.price}</td>
-                <td>{item.stock}</td>
+            {products.map((product) => (
+              <tr key={product.id}>
+                <td>{product.title || product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.quantity}</td>
                 <td>
-                  <Image src="/images/edit.svg" alt="" width={20} height={20} />
-                  <Image src="/images/trash.svg" alt="" width={20} height={20} />
+                  <Image
+                    src="/images/edit.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    type="submit"
+                    onClick={() => setEditProduct(product)}
+                  />
+                  <Image
+                    src="/images/trash.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    type="submit"
+                    onClick={() => setDeleteProduct(product)}
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {editProduct && (<EditProduct product={editProduct} onClose={() => setEditProduct(null)}/>)}
+        {deleteProduct && (<Modal product={deleteProduct} onClose ={()=> setDeleteProduct(null)}/>)}
     </div>
-  )
+  );
 }
-
-

@@ -8,4 +8,4 @@ export default function App({ Component, pageProps }) {
     </QueryClientProvider>
   );
 }
-//  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+
