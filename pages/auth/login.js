@@ -7,7 +7,12 @@ import { LoginFormSchema } from "../schema/LoginFormSchema";
 import { setCookie } from "../utils/cooki";
 import styles from "../../styles/Login.module.css";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+
 export default function LoginPage() {
+  const router = useRouter()
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -24,21 +29,41 @@ export default function LoginPage() {
 
       {
         onSuccess: (data) => {
-          setCookie("token", data?.data?.token);
-          console.log(data);
+          const token = data?.data?.token;
+         if(!token){
+          setErrorMessage("توکن دریافت نشد")
+          return
+         }
+         setCookie("token", token)
+         router.push("/components/product")
         },
-        onError: (erroe) => {
-          console.log(erroe);
-        },
+      onError: (error) => {
+  if (!error.response) {
+    setErrorMessage("ارتباط با سرور برقرار نشد 🌐");
+    return;
+  }
+
+  switch (error.response.status) {
+    case 400:
+      setErrorMessage("اطلاعات وارد شده نامعتبر است");
+      break;
+    case 401:
+      setErrorMessage("نام کاربری یا رمز عبور اشتباه است");
+      break;
+    case 500:
+      setErrorMessage("خطای داخلی سرور، کمی صبر کنید 🧑‍🔧");
+      break;
+    default:
+      setErrorMessage("خطای ناشناخته‌ای رخ داد");
+  }
+}
       }
     );
   };
-{errors.username && <span>{errors.username.message}</span>}
-{errors.password && <span>{errors.password.message}</span>}
 
   return (
     <div className={styles.container}>
-      <Image src={logo}></Image>
+      <Image src={logo} alt="botostartLogo"></Image>
       <h1>فرم ورود</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
         <div>
@@ -64,6 +89,7 @@ export default function LoginPage() {
           ایجاد حساب کاربری!
         </Link>
       </form>
+      {errorMessage && (<div className={styles.errorBox}> {errorMessage} </div>)}
     </div>
   );
 }

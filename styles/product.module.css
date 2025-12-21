@@ -121,3 +121,33 @@
   
   
 }
+.pngPic{
+  border-radius: 50%;
+background-size: cover;
+}
+.table{
+  border: none;
+  margin: 1rem 3rem;
+  text-align: center;
+
+
+}
+.table thead{
+background-color: #f2f2f2;
+font-size: 14px;
+font-weight: 500;
+color: #282828;
+border-top-left-radius: 30px;
+border-top-right-radius: 30px;
+ height: 70px;
+
+
+}
+.table tbody tr{
+
+height: 38px;
+border-width: 1px;
+font-size: 12px;
+font-weight: 400;
+
+}

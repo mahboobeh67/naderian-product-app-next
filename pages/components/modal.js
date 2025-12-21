@@ -1,53 +1,42 @@
-import { useRouter } from "next/router"
 import Image from "next/image"
 import styles from "../../styles/Modal.module.css"
-import { useState } from "react"
-function Modal({product, onClose}) {
-    const router = useRouter()
-    const [isClosing , setIsClosing] = useState(false)
-    if (isClosing) return null
-    const handleClose = () =>{
-      setIsClosing(true)
-      router.back()
-    }
-    const handleDelete = async () => {
-  // await deleteProduct(id)
- onClose()
-}
+
+function Modal({ product, onClose, onConfirm, isLoading }) {
   return (
-     <div className={styles.overlay}>
-      <div  className={styles.modal}>
-        <div >
-          <Image onClick={() => handleClose()}
-            src="/images/Close.svg"
-            alt="close"
-            width={96}
-            height={97}
-            className={styles.img}
-          />
-          <div className={styles.modalText}>
-            <p >{product.title}آیا از حذف این محصول مطمئنید؟</p>
-          </div>
-          <div >
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
+        
+        <Image
+          onClick={onClose}
+          src="/images/Close.svg"
+          alt="close"
+          width={24}
+          height={24}
+          className={styles.img}
+        />
 
-           <div className={styles.btn}>
-<div className={styles.deleteBtn}>
+        <div className={styles.modalText}>
 
-              <button onClick={handleDelete}>حذف</button>
-            </div>
-            <button
-              onClick={onClose}
-             
-            >
-              لغو
-            </button>
-            
-            
-           </div>
-            
-
-          </div>
+<p>آیا از حذف
+            <strong>{product?.title ?? "  این محصول  "}</strong>
+            مطمئنید؟
+          </p>
         </div>
+
+        <div className={styles.btn}>
+          <button
+            className={styles.deleteBtn}
+            onClick={onConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? "در حال حذف..." : "حذف"}
+          </button>
+
+          <button onClick={onClose} disabled={isLoading}>
+            لغو
+          </button>
+        </div>
+
       </div>
     </div>
   )

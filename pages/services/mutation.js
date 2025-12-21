@@ -1,3 +1,6 @@
+"use client"
+
+import { addProduct } from "./queris";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { updateProduct } from "./products";
@@ -27,15 +30,19 @@ export const useLogin = () => {
 export const useAddProductItem = () => {
     const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data) => api.post("/products", data),
+    mutationFn:addProduct,
     onSuccess: () => {
-        queryClient.invalidateQueries({queryKey:["products"]})
+        queryClient.invalidateQueries({queryKey:["products"], exact:false})
     }
   });
 };
 export const useDeleteProductItem = () => {
+  const qc = useQueryClient()
   return useMutation({
     mutationFn: (id) => api.delete(`/products/${id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({queryKey :["products"], exact:false})
+    }
   });
 };
 export const useUpdateProduct = () => {
@@ -43,7 +50,7 @@ export const useUpdateProduct = () => {
   return useMutation({
     mutationFn: updateProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["products"], exact:false, });
     },
   });
 };
